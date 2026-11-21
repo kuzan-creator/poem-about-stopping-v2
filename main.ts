@@ -28,6 +28,13 @@ if (count < 1 || count > 280 || poem.trim().length === 0) {
   throw new Error(`entry must be 1-280 characters, got ${count}`);
 }
 
+// The poem must keep its shape: a title line, then two stanzas
+// separated by blank lines. A flat block of text is not a poem.
+const blocks = poem.split("\n\n");
+if (blocks.length !== 3 || blocks.some((b) => b.trim().length === 0)) {
+  throw new Error(`entry must have a title and two stanzas, got ${blocks.length} blocks`);
+}
+
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, "entry.txt"), poem, "utf8");
